@@ -2,10 +2,7 @@ package com.meusprojetos.commerce.dto;
 
 import com.meusprojetos.commerce.entities.Category;
 import com.meusprojetos.commerce.entities.Product;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +17,7 @@ public class ProductDTO {
     @NotBlank(message = "Campo obrigatório!")
     private String description;
     @Positive(message = "O preço deve ser positivo!")
+    @NotNull(message = "O preço não pode ser nulo!")
     private Double price;
     private String imgUrl;
 
