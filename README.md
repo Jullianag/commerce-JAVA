@@ -14,14 +14,20 @@ Todas as requisições foram testadas via **Postman** (GET, POST, DEL, PUT).
 ## Algumas imagens do que seria o Layout web
 ![Demonstração 1](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Catalog.png)
 
-![Demonstração 2](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Product%20Form.png)
-
-![Demonstração 2](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Product%20Listing%20(1).png)
-
 ![Demonstração 2](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Product%20Listing.png)
+
+![Demonstração 3](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Product%20Form%20(1).png)
 
 ## Modelo conceitual
 ![Modelo Conceitual](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Captura%20de%20tela%202024-04-02%20155018.png)
+
+## Postman
+![Demonstração 4](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Captura%20de%20tela%202024-04-02%20164402.png)
+
+![Demonstração 5](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Captura%20de%20tela%202024-04-02%20164439.png)
+
+![Demonstração 6](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Captura%20de%20tela%202024-04-02%20165024.png)
+
 
 # Tecnologias utilizadas
 ## Back end
@@ -30,14 +36,14 @@ Todas as requisições foram testadas via **Postman** (GET, POST, DEL, PUT).
 - JPA / Hibernate
 - Maven
 
-## Implantação em produção
+## Banco de dados:
 - Banco de dados: teste H2
 
 # Como executar o projeto
 
 ```bash
 # clonar repositório
-git clone https://github.com/devsuperior/sds1-wmazoni
+git clone https://github.com/Jullianag/commerce-JAVA
 
 # entrar na pasta do projeto back end
 cd backend
