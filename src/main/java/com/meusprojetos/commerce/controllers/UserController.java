@@ -2,6 +2,7 @@ package com.meusprojetos.commerce.controllers;
 
 import com.meusprojetos.commerce.dto.UserDTO;
 import com.meusprojetos.commerce.dto.UserInsertDTO;
+import com.meusprojetos.commerce.dto.UserUpdateDTO;
 import com.meusprojetos.commerce.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,19 @@ public class UserController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(newDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO dto) {
+        UserDTO newDTO = service.update(id, dto);
+        return ResponseEntity.ok().body(newDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

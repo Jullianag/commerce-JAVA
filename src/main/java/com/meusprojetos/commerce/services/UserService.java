@@ -3,13 +3,17 @@ package com.meusprojetos.commerce.services;
 import com.meusprojetos.commerce.dto.RoleDTO;
 import com.meusprojetos.commerce.dto.UserDTO;
 import com.meusprojetos.commerce.dto.UserInsertDTO;
+import com.meusprojetos.commerce.dto.UserUpdateDTO;
 import com.meusprojetos.commerce.entities.Role;
 import com.meusprojetos.commerce.entities.User;
 import com.meusprojetos.commerce.projections.UserDetailsProjection;
 import com.meusprojetos.commerce.repositories.RoleRepository;
 import com.meusprojetos.commerce.repositories.UserRepository;
+import com.meusprojetos.commerce.services.exceptions.DatabaseException;
 import com.meusprojetos.commerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -20,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -102,7 +107,33 @@ public class UserService implements UserDetailsService {
         return new UserDTO(entity);
     }
 
-    private void CopyDtoToEntity(UserInsertDTO dto, User entity) {
+    @Transactional
+    public UserDTO update(Long id, UserUpdateDTO dto) {
+        try {
+            User entity = repository.getReferenceById(id);
+            CopyDtoToEntity(dto, entity);
+            entity = repository.save(entity);
+            return new UserDTO(entity);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Id não encontrado " + id);
+        }
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Id não encontrado " + id);
+        }
+        try {
+            repository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha na integridade referencial");
+        }
+    }
+
+    private void CopyDtoToEntity(UserDTO dto, User entity) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
@@ -114,4 +145,5 @@ public class UserService implements UserDetailsService {
             entity.getRoles().add(role);
         }
     }
+
 }

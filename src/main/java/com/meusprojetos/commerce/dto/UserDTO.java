@@ -27,6 +27,14 @@ public class UserDTO {
     public UserDTO() {
     }
 
+    public UserDTO(Long id, String name, String email, String phone, LocalDate birthDate) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.birthDate = birthDate;
+    }
+
     public UserDTO(User entity) {
         id = entity.getId();
         name = entity.getName();
@@ -56,6 +64,26 @@ public class UserDTO {
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(@NotBlank(message = "Campo requerido") String name) {
+        this.name = name;
+    }
+
+    public void setEmail(@Email(message = "Favor entrar com um email válido") String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Set<RoleDTO> getRoles() {
