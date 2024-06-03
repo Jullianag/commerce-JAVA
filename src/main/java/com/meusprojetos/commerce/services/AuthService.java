@@ -17,4 +17,5 @@ public class AuthService {
             throw new ForbiddenException("Acesso negado!");
         }
     }
+
 }

@@ -1,16 +1,23 @@
 package com.meusprojetos.commerce.services;
 
+import com.meusprojetos.commerce.dto.RoleDTO;
 import com.meusprojetos.commerce.dto.UserDTO;
+import com.meusprojetos.commerce.dto.UserInsertDTO;
 import com.meusprojetos.commerce.entities.Role;
 import com.meusprojetos.commerce.entities.User;
 import com.meusprojetos.commerce.projections.UserDetailsProjection;
+import com.meusprojetos.commerce.repositories.RoleRepository;
 import com.meusprojetos.commerce.repositories.UserRepository;
+import com.meusprojetos.commerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +29,12 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -49,7 +62,7 @@ public class UserService implements UserDetailsService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
             String username = jwtPrincipal.getClaim("username");
-            return repository.findByEmail(username).get();
+            return repository.findByEmail(username);
         }
         catch (Exception e) {
             throw new UsernameNotFoundException("Email não encontradi!");
@@ -60,5 +73,45 @@ public class UserService implements UserDetailsService {
     public UserDTO getMe() {
         User user = authenticated();
         return new UserDTO(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserDTO> findAllPaged(Pageable pageable) {
+        Page<User> list = repository.findAll(pageable);
+        return list.map(x -> new UserDTO(x));
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO findById(Long id) {
+        User entity = repository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("Id não encontrado"));
+        return new UserDTO(entity);
+    }
+
+    @Transactional
+    public UserDTO insert(UserInsertDTO dto) {
+        User entity = new User();
+        CopyDtoToEntity(dto, entity);
+
+        entity.getRoles().clear();
+        Role role = roleRepository.findByAuthority("ROLE_CLIENT");
+        entity.getRoles().add(role);
+
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        entity = repository.save(entity);
+        return new UserDTO(entity);
+    }
+
+    private void CopyDtoToEntity(UserInsertDTO dto, User entity) {
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPhone(dto.getPhone());
+        entity.setBirthDate(dto.getBirthDate());
+
+        entity.getRoles().clear();
+        for (RoleDTO roleDTO : dto.getRoles()) {
+            Role role = roleRepository.getReferenceById(roleDTO.getId());
+            entity.getRoles().add(role);
+        }
     }
 }
