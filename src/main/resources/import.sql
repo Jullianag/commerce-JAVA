@@ -57,12 +57,14 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES (25, 3);
 
 INSERT INTO tb_user (name, email, phone, password, birth_date) VALUES ('Maria Brown', 'maria@gmail.com', '988888888', '$2a$10$lugrKtSP98NzXUCAbg1rQurMr92Nxk/WRgd4h5HU/Nz7pKSmnKdKW', '2001-07-25');
 INSERT INTO tb_user (name, email, phone, password, birth_date) VALUES ('Alex Green', 'alex@gmail.com', '977777777', '$2a$10$lugrKtSP98NzXUCAbg1rQurMr92Nxk/WRgd4h5HU/Nz7pKSmnKdKW', '1987-12-13');
+INSERT INTO tb_user (name, email, phone, password, birth_date) VALUES ('Thomas Lecter', 'emailvalidonoimportsqlgmail.com', '977777722', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', '1986-05-14');
 
 INSERT INTO tb_role (authority) VALUES ('ROLE_CLIENT');
 INSERT INTO tb_role (authority) VALUES ('ROLE_ADMIN');
 
 INSERT INTO tb_user_role (user_id, role_id) VALUES (1, 1);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (2, 2);
+INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 1);
 
 INSERT INTO tb_order (moment, status, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2022-07-25T13:00:00Z', 1, 1);
 INSERT INTO tb_order (moment, status, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2022-07-29T15:50:00Z', 3, 2);

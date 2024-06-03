@@ -4,6 +4,7 @@ import com.meusprojetos.commerce.dto.CustomError;
 import com.meusprojetos.commerce.dto.FieldMessage;
 import com.meusprojetos.commerce.dto.ValidationError;
 import com.meusprojetos.commerce.services.exceptions.DatabaseException;
+import com.meusprojetos.commerce.services.exceptions.EmailException;
 import com.meusprojetos.commerce.services.exceptions.ForbiddenException;
 import com.meusprojetos.commerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +48,13 @@ public class ControllerExceptionHandler {
     public ResponseEntity<CustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.FORBIDDEN;
         CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), "Forbidden Exception", request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<CustomError> emailSend(EmailException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        CustomError err = new CustomError(Instant.now(), status.value(), "Email exception", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 }

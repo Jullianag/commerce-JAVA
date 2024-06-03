@@ -19,5 +19,10 @@
       "name": "security.client-secret",
       "type": "java.lang.String",
       "description": "Description for security.client-secret."
+    },
+    {
+      "name": "email.password-recover.token.minutes",
+      "type": "java.lang.String",
+      "description": "Description for email.password-recover.token.minutes."
     }
   ] }
