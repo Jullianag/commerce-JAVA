@@ -11,6 +11,7 @@ import com.meusprojetos.commerce.repositories.RoleRepository;
 import com.meusprojetos.commerce.repositories.UserRepository;
 import com.meusprojetos.commerce.services.exceptions.DatabaseException;
 import com.meusprojetos.commerce.services.exceptions.ResourceNotFoundException;
+import com.meusprojetos.commerce.utils.CustomUserUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -41,6 +42,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CustomUserUtil customUserUtil;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,10 +67,9 @@ public class UserService implements UserDetailsService {
     }
 
     protected User authenticated() {
+        // modificado para o teste
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-            String username = jwtPrincipal.getClaim("username");
+            String username = customUserUtil.getLoggedUsername();
             return repository.findByEmail(username);
         }
         catch (Exception e) {

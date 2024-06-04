@@ -1,5 +1,6 @@
 package com.meusprojetos.commerce.services;
 
+import com.meusprojetos.commerce.config.Generated;
 import com.meusprojetos.commerce.repositories.UserRepository;
 import com.meusprojetos.commerce.services.exceptions.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class EmailService {
     private JavaMailSender emailSender;
 
 
+    @Generated
     public void sendEmail(String to, String subject, String body) {
 
         try {

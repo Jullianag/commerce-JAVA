@@ -100,6 +100,7 @@
 						<exclude>com/meusprojetos/commerce/controllers/**</exclude>
 						<exclude>com/meusprojetos/commerce/controllers/handlers/**</exclude>
 						<exclude>com/meusprojetos/commerce/services/exceptions/**</exclude>
+						<exclude>com/meusprojetos/commerce/services/validations/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>

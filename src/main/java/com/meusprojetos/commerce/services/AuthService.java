@@ -1,5 +1,6 @@
 package com.meusprojetos.commerce.services;
 
+import com.meusprojetos.commerce.config.Generated;
 import com.meusprojetos.commerce.dto.EmailDTO;
 import com.meusprojetos.commerce.dto.NewPasswordDTO;
 import com.meusprojetos.commerce.entities.PasswordRecover;
@@ -54,6 +55,7 @@ public class AuthService {
         }
     }
 
+    @Generated
     @Transactional
     public void saveNewPassword(NewPasswordDTO body) {
 
@@ -68,6 +70,7 @@ public class AuthService {
         user = userRepository.save(user);
     }
 
+    @Generated
     @Transactional
     public void createRecoverToken(EmailDTO body) {
 
