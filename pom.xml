@@ -75,6 +75,50 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+
+					<propertiesEncoding>ISO-8859-1</propertiesEncoding>
+
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<configuration>
+					<excludes>
+						<exclude>com/meusprojetos/commerce/CommerceApplication.class</exclude>
+						<exclude>com/meusprojetos/commerce/config/**</exclude>
+						<exclude>com/meusprojetos/commerce/entities/**</exclude>
+						<exclude>com/meusprojetos/commerce/dto/**</exclude>
+						<exclude>com/meusprojetos/commerce/controllers/**</exclude>
+						<exclude>com/meusprojetos/commerce/controllers/handlers/**</exclude>
+						<exclude>com/meusprojetos/commerce/services/exceptions/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-code-coverage-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
