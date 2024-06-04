@@ -33,7 +33,10 @@ Todas as requisições foram testadas via **Postman** (GET, POST, DEL, PUT).
 ![Demonstração 6](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/Captura%20de%20tela%202024-04-02%20165024.png)
 
 ## Collection Postman
-[Arquivo JSON](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/commerce.postman_collection.json)
+[commerce.json](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/commerce.postman_collection.json)
+
+### Environment Postman
+[environment.json](https://github.com/Jullianag/commerce-JAVA/blob/main/assets/auth%20commerce.postman_environment.json)
 
 
 # Tecnologias utilizadas
