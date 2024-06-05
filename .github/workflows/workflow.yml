@@ -17,8 +17,8 @@ jobs:
       - name: Set up the Java JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          java-version: '21'
+          distribution: 'Azul Zulu'
 
       - name: Build with Maven
         run: mvn -B test
