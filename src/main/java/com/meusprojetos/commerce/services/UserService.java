@@ -1,5 +1,6 @@
 package com.meusprojetos.commerce.services;
 
+import com.meusprojetos.commerce.config.Generated;
 import com.meusprojetos.commerce.dto.RoleDTO;
 import com.meusprojetos.commerce.dto.UserDTO;
 import com.meusprojetos.commerce.dto.UserInsertDTO;
@@ -136,6 +137,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    @Generated
     private void CopyDtoToEntity(UserDTO dto, User entity) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
