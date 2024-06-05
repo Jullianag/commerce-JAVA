@@ -1,7 +1,5 @@
 package com.meusprojetos.commerce.services;
 
-import com.meusprojetos.commerce.dto.NewPasswordDTO;
-import com.meusprojetos.commerce.entities.PasswordRecover;
 import com.meusprojetos.commerce.entities.User;
 import com.meusprojetos.commerce.repositories.PasswordRecoverRepository;
 import com.meusprojetos.commerce.repositories.UserRepository;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
