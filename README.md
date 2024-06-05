@@ -1,14 +1,16 @@
 # Commerce JAVA 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/Jullianag/commerce-JAVA/blob/main/LICENSE) ![GitHub language count](https://img.shields.io/github/languages/count/Jullianag/commerce-JAVA) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Jullianag/commerce-JAVA) ![GitHub last commit](https://img.shields.io/github/last-commit/Jullianag/commerce-JAVA) ![GitHub repo size](https://img.shields.io/github/repo-size/Jullianag/commerce-JAVA)
 
-
-
+## Cobertura de testes: Jacoco
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/Jullianag/commerce-JAVA/actions/workflows/workflow.yml)
 
 
 # Sobre o projeto
 
 O projeto Commerce é uma aplicação back end desenvolvida no curso **DevSuperior** do professor Nélio Alves. 
-Site: [DevSuperior](https://devsuperior.com "Site da DevSuperior").
+Site: [DevSuperior](https://devsuperior.com "Site da DevSuperior"). 
+Porém foram acrescentadas novas funcionalidades como: cobertura de testes unitários, envio de email para o usuário recuperar a senha e
+novos endpoints de usuários.
 
 O projeto consiste em todas as estruturas de um CRUD, organizado em camadas, exceções, validações, consultas SQL e JPQL, controle de acesso e login. Nele o usuário faz autenticação, busca seus produtos, 
 pedidos, categorias e ainda pode consultar suas informações de cadastro no sistema . Na área administrativa o usário pode inserir, deletar ou atualizar produtos.
