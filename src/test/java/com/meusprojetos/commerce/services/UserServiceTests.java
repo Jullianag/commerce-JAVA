@@ -138,12 +138,15 @@ public class UserServiceTests {
     @Test
     public void authenticatedShouldReturnWhenUserExists() {
 
+
         Mockito.when(userUtil.getLoggedUsername()).thenReturn(existingUsername);
 
         User result = userService.authenticated();
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.getUsername(), existingUsername);
+
+
     }
 
     @Test
