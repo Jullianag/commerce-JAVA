@@ -3,10 +3,12 @@ package com.meusprojetos.commerce.controllers;
 
 import com.meusprojetos.commerce.tests.TokenUtil;
 import io.restassured.http.ContentType;
+import org.json.JSONException;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
@@ -18,6 +20,8 @@ public class OrderControllerRA {
     private String clientToken, adminToken, invalidToken;
 
     private Long existingOrderId, nonExistingOrderId;
+
+    private Map<String, List<Map<String, Object>>> postOrderInstance;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -36,6 +40,21 @@ public class OrderControllerRA {
         clientToken = TokenUtil.obtainAccessToken(clientUser, clientPassword);
         adminToken = TokenUtil.obtainAccessToken(adminUser, adminPassword);
         invalidToken = adminToken + "xpto";
+
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("productId", 1);
+        item1.put("quantity", 2);
+
+        Map<String, Object> item2 = new HashMap<>();
+        item2.put("productId", 5);
+        item2.put("quantity", 1);
+
+        List<Map<String, Object>> itemInstance = new ArrayList<>();
+        itemInstance.add(item1);
+        itemInstance.add(item2);
+
+        postOrderInstance = new HashMap<>();
+        postOrderInstance.put("items", itemInstance);
     }
 
     @Test
@@ -84,7 +103,7 @@ public class OrderControllerRA {
     }
 
     @Test
-    public void findByIdShouldReturnForbiddenWhenIdExistsAndClientLoggedAndOrderDoesNotBelongUser() {
+    public void findByIdShouldReturnForbiddenWhenIdExistsAndClientLoggedAndOrderDoesNotBelongUser() throws JSONException {
 
         Long otherOrderId = 2L;
 
@@ -99,7 +118,7 @@ public class OrderControllerRA {
     }
 
     @Test
-    public void findByIdShouldReturnNotFoundWhenIdDoesNotExistAndAdminLogged() {
+    public void findByIdShouldReturnNotFoundWhenIdDoesNotExistAndAdminLogged() throws JSONException {
 
         given()
                 .header("content-type", "application/json")
@@ -112,7 +131,7 @@ public class OrderControllerRA {
     }
 
     @Test
-    public void findByIdShouldReturnUnauthorizedWhenIdExistsAndInvalidToken() {
+    public void findByIdShouldReturnUnauthorizedWhenIdExistsAndInvalidToken() throws JSONException {
 
         given()
                 .header("content-type", "application/json")
@@ -122,6 +141,66 @@ public class OrderControllerRA {
                 .get("/orders/{id}", existingOrderId)
                 .then()
                 .statusCode(401);
+    }
+
+    @Test
+    public void insertShouldReturnOrderCreatedWhenClientLogged() throws JSONException {
+
+        JSONObject newOrder = new JSONObject(postOrderInstance);
+
+        given()
+                .header("content-type", "application/json")
+                .header("Authorization", "Bearer " + clientToken)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(newOrder)
+                .when()
+                .post("/orders")
+                .then()
+                .statusCode(201)
+                .body("status", equalTo("WAITING_PAYMENT"))
+                .body("client.name", equalTo("Maria Brown"))
+                .body("items.name", hasItems("The Lord of the Rings", "Rails for Dummies"))
+                .body("items.price", hasItems(90.5F, 100.99F))
+                .body("total", is(281.99F));
+    }
+
+    @Test
+    public void insertShouldReturnUnprocessableEntityWhenClientLoggedAndOrderHasNoItem() throws JSONException {
+
+        postOrderInstance.put("items", null);
+        JSONObject newOrder = new JSONObject(postOrderInstance);
+
+        given()
+                .header("content-type", "application/json")
+                .header("Authorization", "Bearer " + clientToken)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(newOrder)
+                .when()
+                .post("/orders")
+                .then()
+                .statusCode(422)
+                .body("errors.fieldName[0]", equalTo("items"))
+                .body("errors.message[0]", equalTo("A lista não pode ser vazia"));
+    }
+
+    @Test
+    public void insertShouldReturnUnauthorizedWhenInvalidToken() throws JSONException {
+
+        JSONObject newOrder = new JSONObject(postOrderInstance);
+
+        given()
+                .header("content-type", "application/json")
+                .header("Authorization", "Bearer " + invalidToken)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(newOrder)
+                .when()
+                .post("/orders")
+                .then()
+                .statusCode(401);
+
     }
 
 }
