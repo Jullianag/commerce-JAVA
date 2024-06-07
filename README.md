@@ -1,8 +1,16 @@
 # Commerce JAVA 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/Jullianag/commerce-JAVA/blob/main/LICENSE) ![GitHub language count](https://img.shields.io/github/languages/count/Jullianag/commerce-JAVA) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Jullianag/commerce-JAVA) ![GitHub last commit](https://img.shields.io/github/last-commit/Jullianag/commerce-JAVA) ![GitHub repo size](https://img.shields.io/github/repo-size/Jullianag/commerce-JAVA)
 
-## Cobertura de testes: Jacoco
+## Cobertura de testes:
+
+### Unitários
+- **Jacoco**
+  
 [![Coverage](.github/badges/jacoco.svg)](https://github.com/Jullianag/commerce-JAVA/actions/workflows/workflow.yml)
+
+### API TEST
+- Rest Assured
+
 
 
 # Sobre o projeto
