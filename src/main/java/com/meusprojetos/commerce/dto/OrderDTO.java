@@ -16,17 +16,17 @@ public class OrderDTO {
     private Instant moment;
     private OrderStatus status;
     private ClientDTO client;
-    private PaymentDTO paymen;
+    private PaymentDTO payment;
 
     @NotEmpty(message = "A lista não pode ser vazia")
     private List<OrderItemDTO> items = new ArrayList<>();
 
-    public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO paymen) {
+    public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.client = client;
-        this.paymen = paymen;
+        this.payment = payment;
     }
 
     public OrderDTO(Order entity) {
@@ -34,7 +34,7 @@ public class OrderDTO {
         moment = entity.getMoment();
         status = entity.getStatus();
         client = new ClientDTO(entity.getClient());
-        paymen = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
+        payment = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
         for (OrderItem item : entity.getItems()) {
             OrderItemDTO itemDTO = new OrderItemDTO(item);
             items.add(itemDTO);
@@ -57,8 +57,8 @@ public class OrderDTO {
         return client;
     }
 
-    public PaymentDTO getPaymen() {
-        return paymen;
+    public PaymentDTO getPayment() {
+        return payment;
     }
 
     public List<OrderItemDTO> getItems() {

@@ -110,7 +110,7 @@ public class ProductControllerRA {
                 .get("/products?page=0")
                 .then()
                 .statusCode(200)
-                .body("content.name", hasItems("Macbook Pro", "The Lord of the Rings"));
+                .body("content.name", hasItems("Macbook Pro", "PC Gamer Tera"));
     }
 
     @Test
@@ -447,7 +447,7 @@ public class ProductControllerRA {
     @Test
     public void deleteShouldReturnNoContentWhenAdminLoggedAndIdExists() throws JSONException {
 
-        existingProductId = 24L;
+        existingProductId = 25L;
 
         given()
                 .header("Authorization", "Bearer " + adminToken)
