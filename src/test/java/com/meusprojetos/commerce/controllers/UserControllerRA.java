@@ -25,7 +25,7 @@ public class UserControllerRA {
     private Map<String, Object> postUserInstance;
     private Map<String, Object> putUserInstance;
 
-    private Long existingUserId, nonExistingUserId;
+    private Long existingUserId, nonExistingUserId, dependentUserId;
 
     @BeforeEach
     public void setUp()  throws Exception {
@@ -41,10 +41,9 @@ public class UserControllerRA {
         adminToken = TokenUtil.obtainAccessToken(adminUsername, adminPassword);
         invalidToken = adminToken + "xpto";
 
-
         postUserInstance = new HashMap<>();
         postUserInstance.put("name", "novo usuario");
-        postUserInstance.put("email", "bob@gmail.com");
+        postUserInstance.put("email", "novo@gmail.com");
         postUserInstance.put("phone", "999999991");
         postUserInstance.put("password", "bob123456");
         postUserInstance.put("birthDate", "1994-07-20");
@@ -199,5 +198,118 @@ public class UserControllerRA {
                 .get("/users")
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    public void insertShouldReturnUserCreatedWhenLoggedAsAdmin() throws Exception {
+
+        JSONObject newUser = new JSONObject(postUserInstance);
+
+        given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer " + adminToken)
+                .body(newUser)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(201)
+                .body("roles.authority", hasItems("ROLE_CLIENT"));
+    }
+
+    @Test
+    public void insertShouldThrowsUnprocessableEntityWhenAdminLoggedAndInvalidName() {
+
+        postUserInstance.put("name", null);
+        postUserInstance.put("email", "email@gmail.com");
+        JSONObject newUser = new JSONObject(postUserInstance);
+
+        given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer " + adminToken)
+                .body(newUser)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(422)
+                .body("errors.fieldName[0]",equalTo("name"))
+                .body("errors.message[0]", equalTo("Campo requerido"));
+    }
+
+    @Test
+    public void updateShouldReturnUserWhenIdExistsAndAdminLogged() throws Exception {
+
+        JSONObject user = new JSONObject(putUserInstance);
+        existingUserId = 1L;
+
+        given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer " + adminToken)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(user)
+                .when()
+                .put("/users/{id}", existingUserId)
+                .then()
+                .statusCode(200)
+                .body("name", equalTo("novo usuario"))
+                .body("email", equalTo("bob@gmail.com"));
+    }
+    
+    @Test
+    public void deleteShouldReturnNoContentWhenIdExistsAndAdminLogged() throws Exception {
+
+        existingUserId = 3L;
+
+        given()
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .delete("/users/{id}", existingUserId)
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    public void deleteShouldThrowsNotFoundWhenIdDoesNotExistAndAdminLogged() throws Exception {
+
+        nonExistingUserId = 50L;
+
+        given()
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .delete("/users/{id}", nonExistingUserId)
+                .then()
+                .statusCode(404);
+
+    }
+
+    @Test
+    public void deleteShouldThrowsForbiddenWhenClientLogged() throws Exception {
+
+        existingUserId = 3L;
+
+        given()
+                .header("Authorization", "Bearer " + clientToken)
+                .when()
+                .delete("/users/{id}", existingUserId)
+                .then()
+                .statusCode(403);
+
+    }
+
+    @Test
+    public void deleteShouldThrowsBadRequestWhenDependentIdANdAdminLogged() throws Exception {
+
+        dependentUserId = 1L;
+
+        given()
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .delete("/products/{id}", dependentUserId)
+                .then()
+                .statusCode(400);
     }
 }
